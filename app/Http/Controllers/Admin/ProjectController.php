@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin; //ho spostato il controller
 
-use App\Http\Controllers\Controller;
-use App\Models\Project;
-use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-use App\Models\Type;
+use App\Http\Requests\StoreProjectRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Models\Technology;
+use App\Models\Project;
+use App\Models\Type;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -33,8 +34,9 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
+        $technologies = Technology::all();
 
-        return view('admin.projects.create', compact('types'));
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -62,6 +64,10 @@ class ProjectController extends Controller
 
         $project = Project::create($validated_data);
 
+        if ($request->has('technologies')) {
+            $project->technologies()->attach($validated_data['technologies']);
+        }
+
 
         return to_route('admin.projects.index')->with('message', 'New Project added');
     }
@@ -74,9 +80,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $types = Type::all();
-
-        return view('admin.projects.show', compact('project', 'types'));
+        return view('admin.projects.show', compact('project'));
     }
 
     /**
@@ -87,8 +91,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $types = Type::all();
+        $technologies = Technology::all();
 
-        return view('admin.projects.edit', compact('project'));
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -114,9 +120,15 @@ class ProjectController extends Controller
         }
 
         $project_slug = Project::createSlug($validated_data['title']);
-
         $validated_data['slug'] = $project_slug;
+
         $project->update($validated_data);
+
+        if ($request->has('technologies')) {
+            $project->technologies()->sync($validated_data['technologies']);
+        } else {
+            $project->technologies()->sync([]);
+        }
 
         return to_route('admin.projects.index')->with('message', " Project $project->title modified");
     }
@@ -135,6 +147,7 @@ class ProjectController extends Controller
         }
 
         $project->delete();
+
         return to_route('admin.projects.index')->with('message', " Project $project->title deleted");
     }
 }
