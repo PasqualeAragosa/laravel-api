@@ -32,9 +32,9 @@ Route::middleware('auth', 'verified')->name('admin.')->prefix('admin')->group(fu
         'types' => 'type:slug'
     ])->except(['show', 'create', 'edit',]);
 
-    // Route::resource('technologies', technologyController::class)->parameters([
-    //     'technologies' => 'technology:slug'
-    // ])->except(['show', 'create', 'edit',]); 
+    Route::resource('technologies', TechnologyController::class)->parameters([
+        'technologies' => 'technology:slug'
+    ])->except(['show', 'create', 'edit',]);
 });
 
 require __DIR__ . '/auth.php';

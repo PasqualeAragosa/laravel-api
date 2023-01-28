@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\UpdateTechnologyRequest;
+use App\Http\Requests\StoreTechnologyRequest;
 use App\Http\Controllers\Controller;
-use App\Models\Technology;
 use Illuminate\Http\Request;
+use App\Models\Technology;
 
 class TechnologyController extends Controller
 {
@@ -15,7 +17,8 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        //
+        $technologies = Technology::all();
+        return view('admin.technologies.index', compact('technologies'));
     }
 
     /**
@@ -31,12 +34,20 @@ class TechnologyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\StoreTechnologyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTechnologyRequest $request)
     {
-        //
+        $validated_data = $request->validated();
+
+        // Slug
+        $technology_slug = Technology::createTechnologySlug($validated_data['name']);
+        $validated_data['slug'] = $technology_slug;
+
+        $technology = Technology::create($validated_data);
+
+        return to_route('admin.technologies.index')->with('message', "New project technology $technology->name added");
     }
 
     /**
@@ -64,13 +75,21 @@ class TechnologyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UpdateTechnologyRequest $request
      * @param  \App\Models\Technology  $technology
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Technology $technology)
+    public function update(UpdateTechnologyRequest $request, Technology $technology)
     {
-        //
+        $validated_data = $request->validated();
+
+        // Slug
+        $technology_slug = Technology::createTechnologySlug($validated_data['name']);
+        $validated_data['slug'] = $technology_slug;
+
+        $technology->update($validated_data);
+
+        return to_route('admin.technologies.index')->with('message', "Project technology $technology->name modified");
     }
 
     /**
@@ -81,6 +100,7 @@ class TechnologyController extends Controller
      */
     public function destroy(Technology $technology)
     {
-        //
+        $technology->delete();
+        return to_route('admin.technologies.index')->with('message', " Project $technology->name deleted");
     }
 }

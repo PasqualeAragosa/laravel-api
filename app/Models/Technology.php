@@ -20,6 +20,7 @@ class Technology extends Model
 
     public static function createTechnologySlug($name)
     {
-        return Str::slug($name);
+        $technology_slug = Str::slug($name);
+        return $technology_slug;
     }
 }

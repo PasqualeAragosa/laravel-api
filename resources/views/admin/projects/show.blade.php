@@ -15,6 +15,16 @@
         <p>{{$project->slug}}</p>
         <h4>Type: </h4>
         <p>{{$project->type ? $project->type->name : 'No Type'}}</p>
+        <h4>Technologies: </h4>
+        @if(count($project->technologies) > 0)
+        <!-- per ogni tecnologia assegnata mostro in nome -->
+        @foreach($project->technologies as $technology)
+        <p>{{$technology->name}}</p>
+        @endforeach
+
+        @else
+        <p>No technology assigned for this project</p>
+        @endif
         <h4>Body: </h4>
         <p>{{$project->body}}</p>
     </div>

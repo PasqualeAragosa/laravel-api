@@ -25,7 +25,7 @@
     <div id="app">
 
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Laravel Boolfolio</a>
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="{{url('/') }}">{{ __('Home') }}</a>
 
             <!-- sostituito la searchbar -->
             <ul class="navbar-nav ml-auto pe-4">
@@ -35,7 +35,7 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ url('admin') }}">{{__('Dashboard')}}</a>
+                        <a class="dropdown-item" href="{{ url('admin') }}">{{__('Bho')}}</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
@@ -55,24 +55,31 @@
                     <div class=" pt-3 sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link {{Route::currentRouteName() === 'admin.dashboard' ? 'active' : ''}}" aria-current="page" href="{{route('admin.dashboard')}}">
+                                <a class="nav-link {{Route::currentRouteName() === 'admin.dashboard' ? 'active' : 'link-dark'}}" aria-current="page" href="{{route('admin.dashboard')}}">
                                     <span data-feather="home" class="align-text-bottom"></span>
-                                    <i class="fa-solid fa-clipboard-list"></i>
+                                    <i class="fs-4 me-2 fa-solid fa-house"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{Route::currentRouteName() === 'admin.projects.index' ? 'active' : ''}}" href="{{route('admin.projects.index')}}">
+                                <a class="nav-link {{Route::currentRouteName() === 'admin.projects.index' ? 'active' : 'link-dark'}}" href="{{route('admin.projects.index')}}">
                                     <span data-feather="file" class="align-text-bottom"></span>
-                                    <i class="fa-solid fa-pencil"></i>
+                                    <i class="fs-4 me-2 fa-solid fa-pencil"></i>
                                     Projects
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{Route::currentRouteName() === 'admin.types.index' ? 'active' : ''}}" href="{{route('admin.types.index')}}">
+                                <a class="nav-link {{Route::currentRouteName() === 'admin.types.index' ? 'active' : 'link-dark'}}" href="{{route('admin.types.index')}}">
                                     <span data-feather="file" class="align-text-bottom"></span>
-                                    <i class="fa-solid fa-folder-tree"></i>
+                                    <i class="fs-4 me-2 fa-solid fa-folder-tree"></i>
                                     Types
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{Route::currentRouteName() === 'admin.technologies.index' ? 'active' : 'link-dark'}}" href="{{route('admin.technologies.index')}}">
+                                    <span data-feather="file" class="align-text-bottom"></span>
+                                    <i class="fs-4 me-2 fa-solid fa-code"></i>
+                                    Technologies
                                 </a>
                             </li>
                         </ul>
@@ -83,9 +90,14 @@
                     @yield('content')
                 </main>
             </div>
+            <!-- /.row -->
         </div>
+        <!-- /.container-fluid -->
+
+        @include('partials.footer')
 
     </div>
+    <!-- /.app -->
 </body>
 
 </html>
